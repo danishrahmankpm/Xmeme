@@ -1,63 +1,66 @@
 package com.example.demo.controller;
 
-
-
 import jakarta.validation.Valid;
-import java.util.List;
-import com.example.demo.data.MemeEntity;
-import com.example.demo.exchange.MemePostDto;
-import com.example.demo.exchange.PostResponseDto;
-import com.example.demo.exchange.ResponseDto;
+import com.example.demo.exchange.MemeDto.MemeEntityDto;
+import com.example.demo.exchange.MemeDto.MemePostDto;
 import com.example.demo.service.MemeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Collections;
-import java.util.stream.Collectors;
+
 
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/memes")
 public class MemeController {
 
     @Autowired
     private MemeService memeService;
 
-    @GetMapping("/memes")
-    public List<MemeEntity> getMemes() {
-        ResponseDto responseDto = memeService.getMemeFeed();
-        List<MemeEntity> feed = responseDto.getMemes();
-
-        
-        
-        return feed;
-    }
-
-    @GetMapping("/memes/{id}")
-    public ResponseEntity<MemeEntity> getMemeById(@PathVariable String id) {
-        ResponseDto response = memeService.getMemeById(id);
-
-        if (response.getMemes().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); 
+    @GetMapping("/feed")
+    public ResponseEntity<Page<MemeEntityDto>> getMemes() {
+        Page<MemeEntityDto> memes = memeService.getMemeFeed();
+        if (memes.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-
-        MemeEntity meme = response.getMemes().get(0);
-        
-        return ResponseEntity.ok(meme);
+        return ResponseEntity.ok(memes);
     }
 
-    @PostMapping("/memes")
-    public ResponseEntity<PostResponseDto> postMeme(@Valid @RequestBody MemePostDto memePostDto) {
+    @GetMapping("/{id}")
+    public ResponseEntity<MemeEntityDto> getMemeById(@PathVariable String id) {
+        try {
+            MemeEntityDto meme = memeService.getMemeById(id);
+            return ResponseEntity.ok(meme);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/post")
+    public ResponseEntity<String> postMeme(@Valid @RequestBody MemePostDto memePostDto) {
         if (memePostDto == null || memePostDto.getName() == null || memePostDto.getName().trim().isEmpty()) {
             return ResponseEntity.badRequest().body(null);
         }
         return ResponseEntity.ok(memeService.postMeme(memePostDto));
     }
     
-    @DeleteMapping("/deleteall")
-        public ResponseEntity<ResponseDto> deleteAll(){
-            return ResponseEntity.ok(memeService.deleteAll());
-    
+    @DeleteMapping("/all")
+        public ResponseEntity<Void> deleteAll(){
+            memeService.deleteAll();
+            return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMemeById(@PathVariable String id) {
+        try {
+            memeService.deleteMemeById(id);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    
 }

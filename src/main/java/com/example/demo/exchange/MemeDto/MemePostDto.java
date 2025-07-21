@@ -1,4 +1,4 @@
-package com.example.demo.exchange;
+package com.example.demo.exchange.MemeDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

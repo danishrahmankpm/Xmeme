@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.data.MemeEntity;
-import com.example.demo.exchange.MemePostDto;
-import com.example.demo.exchange.PostResponseDto;
+import com.example.demo.exchange.MemeDto.MemeEntityDto;
+import com.example.demo.exchange.MemeDto.MemePostDto;
 import com.example.demo.service.MemeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -37,8 +36,8 @@ public class MemeControllerTest {
 
     @Test
     void testGetMemes() throws Exception {
-        MemeEntity meme = new MemeEntity("1", "Rakesh", "http://example.com/meme.jpg", "funny");
-        when(memeService.getMemeFeed()).thenReturn(new com.example.demo.exchange.ResponseDto(List.of(meme)));
+        MemeEntityDto meme = new MemeEntityDto("1", "Rakesh", "http://example.com/meme.jpg", "funny");
+        when(memeService.getMemeFeed()).thenReturn(new com.example.demo.exchange.MemeDto.ResponseFeedDto(List.of(meme)));
 
         mockMvc.perform(get("/memes"))
                 .andExpect(status().isOk())
@@ -50,8 +49,8 @@ public class MemeControllerTest {
 
     @Test
     void testGetMemeByIdFound() throws Exception {
-        MemeEntity meme = new MemeEntity("2", "Sulaiman", "http://example.com/another.jpg", "lol");
-        when(memeService.getMemeById("2")).thenReturn(new com.example.demo.exchange.ResponseDto(List.of(meme)));
+        MemeEntityDto meme = new MemeEntityDto("2", "Sulaiman", "http://example.com/another.jpg", "lol");
+        when(memeService.getMemeById("2")).thenReturn(new com.example.demo.exchange.MemeDto.ResponseFeedDto(List.of(meme)));
 
         mockMvc.perform(get("/memes/2"))
                 .andExpect(status().isOk())
