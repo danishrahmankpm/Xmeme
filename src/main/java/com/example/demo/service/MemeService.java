@@ -27,7 +27,7 @@ public class MemeService {
     private ModelMapper modelMapper;
 
     public Page<MemeEntityDto> getMemeFeed() {
-        Pageable pageable = PageRequest.of(0, 10); // Example: first page with 10 items
+        Pageable pageable = PageRequest.of(0, 10); 
         Page<MemeModel> memePage = memeRepository.findAll(pageable);
         List<MemeEntityDto> memeDtos = memePage.getContent().stream()
             .map(memeModel -> modelMapper.map(memeModel, MemeEntityDto.class))

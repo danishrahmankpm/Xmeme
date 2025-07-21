@@ -22,5 +22,8 @@ public class MemePostDto {
 
     @NotBlank
     private String url;
+
+    @NotBlank
+    private String userId; 
     
 }
