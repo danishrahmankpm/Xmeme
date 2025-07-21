@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserModel {
-    String id;
-    String name;
-    String email;
+    private String id;
+    private String name;
+    private String email;
 }

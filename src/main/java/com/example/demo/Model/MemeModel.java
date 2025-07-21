@@ -13,13 +13,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class MemeModel {
     
     @Id
-    String id;
-    
-    String url;
-    
-    String caption;
+    private String id;
 
-    String name;
+    private String userId; 
+    
+    private String url;
+    
+    private String caption;
+
+    private String name;
 
     
 }
