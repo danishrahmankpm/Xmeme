@@ -1,1 +1,1 @@
-A simple web app to post and view memes
+A simple web app to share meme templates 
