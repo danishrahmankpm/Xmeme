@@ -3,6 +3,11 @@ package com.example.demo.Model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,9 +24,15 @@ public class MemeModel {
     
     private String url;
     
-    private String caption;
+    private String title;
 
-    private String name;
+    private String subtitle;
+
+    private List<Vote> upvotes;
+
+    private List<Vote> downvotes;
+
+    private List<Comment> comments;
 
     
 }

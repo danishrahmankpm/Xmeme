@@ -1,5 +1,8 @@
 package com.example.demo.Model;
 
+import java.util.List;
+
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -11,7 +14,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserModel {
-    private String id;
+    @Id
+    private String username;
     private String name;
     private String email;
+    private String password;
+    List<String> memes;
 }

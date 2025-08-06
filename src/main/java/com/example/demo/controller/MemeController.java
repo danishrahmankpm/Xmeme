@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
 import jakarta.validation.Valid;
+
+import com.example.demo.Model.Comment;
+import com.example.demo.exchange.MemeDto.CommentDto;
 import com.example.demo.exchange.MemeDto.MemeEntityDto;
 import com.example.demo.exchange.MemeDto.MemePostDto;
 import com.example.demo.service.MemeService;
@@ -41,11 +44,38 @@ public class MemeController {
 
     @PostMapping("/post")
     public ResponseEntity<String> postMeme(@Valid @RequestBody MemePostDto memePostDto) {
-        if (memePostDto == null || memePostDto.getName() == null || memePostDto.getName().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body(null);
-        }
         return ResponseEntity.ok(memeService.postMeme(memePostDto));
     }
+    @PostMapping("/{id}/upvote")
+    public ResponseEntity<Void> upvote(@PathVariable String id, @RequestParam String username) {
+        try {
+            memeService.upvote(id, username);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    @PostMapping("/{id}/downvote")
+    public ResponseEntity<Void> downvote(@PathVariable String id, @RequestParam String username ) {
+        try {
+            memeService.downvote(id, username);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    @PostMapping("/{id}/comment")
+    public ResponseEntity<Void> comment(@RequestBody CommentDto commentDto) {
+        String id = commentDto.getId();
+        String username = commentDto.getUsername();
+        String commentText = commentDto.getComment();
+        try {
+            memeService.comment(id, username, commentText);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }   
     
     @DeleteMapping("/all")
         public ResponseEntity<Void> deleteAll(){

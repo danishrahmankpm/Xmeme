@@ -13,17 +13,13 @@ import jakarta.validation.constraints.NotBlank;
 @NoArgsConstructor
 
 public class MemePostDto {
-
     @NotBlank
-    private String name;
-
-    @NotBlank
-    private String caption;
-
+    private String username; 
     @NotBlank
     private String url;
-
-    @NotBlank
-    private String userId; 
+    private String title;
+    private String subtitle;
+    
+    
     
 }
